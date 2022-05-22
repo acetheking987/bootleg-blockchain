@@ -1,7 +1,9 @@
 import block, random, file_handler
+from colorama import Fore
 
 file = file_handler.file_handler("blockchain.json")
-difficulty = 8
+difficulty = 5
+tries = []
 
 while True:
     data = file.read_file()
@@ -18,8 +20,10 @@ while True:
         block_data += str(random.randint(1, 1000))
 
     current_block = block.Block(id, block_data, prev_hash, difficulty)
-    current_block.mine_block()
+    current_block.thread_mine_block()
     current_block.dispaly_block()
-    print("")
+    tries.append(current_block.tries)
+    avg_tries = sum(tries) / len(tries)
+    print(f"\n{Fore.RED}Avg Tries: {Fore.BLUE}{avg_tries}{Fore.RESET}\n")
     data.append(current_block.to_dict())
     file.write_file(data)

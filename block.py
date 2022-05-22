@@ -1,6 +1,5 @@
-import sha
+import sha, threading
 from colorama import Fore
-
 
 class Block():
     def __init__(self, block_id, block_data, block_prev_hash, difficulty):
@@ -10,16 +9,32 @@ class Block():
         self.difficulty = difficulty
         self.nonce = None
         self.block_hash = None
+        self.threads = []
+        self.complete = False
+        self.tries = 0
 
-    def mine_block(self):
-        nonce = 0
+    def mine_block(self, start_nonce=0):
+        nonce = start_nonce
         while True:
+            if self.complete:
+                break
+            self.tries += 1
             nonce += 1
             block_hash = sha.sha256(str(self.block_id) + str(self.block_data) + str(self.block_prev_hash) + str(nonce))
             if block_hash[:self.difficulty] == '0' * self.difficulty:
                 self.nonce = nonce
                 self.block_hash = block_hash
+                self.complete = True
                 return True
+
+    def thread_mine_block(self):
+        for i in range(7):
+            thread = threading.Thread(target=self.mine_block, args=(i * 400000,))
+            thread.start()
+            self.threads.append(thread)
+
+        for thread in self.threads:
+            thread.join()
 
     def dispaly_block(self):
         print(Fore.GREEN + 'Block ID: ' + Fore.RESET + str(self.block_id))
