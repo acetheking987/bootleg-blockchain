@@ -34,6 +34,14 @@ class Block():
     def get_hash(self) -> str:
         return self.block_hash
 
+    def to_dict(self) -> dict:
+        return {
+            'block_id': self.block_id,
+            'block_data': self.block_data,
+            'block_prev_hash': self.block_prev_hash,
+            'nonce': self.nonce,
+            'block_hash': self.block_hash
+        }
 
 def create_block(block_id, block_data, block_prev_hash, difficulty):
     block = Block(block_id, block_data, block_prev_hash, difficulty)
