@@ -35,4 +35,4 @@ class Block():
 def create_block(block_id, block_data, block_prev_hash, difficulty):
     block = Block(block_id, block_data, block_prev_hash, difficulty)
     block.mine_block()
-    return block.to_str()
+    return block
