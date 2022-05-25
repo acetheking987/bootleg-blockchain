@@ -30,7 +30,7 @@ class Block():
                 return True
 
     def thread_mine_block(self):
-        for i in range(7):
+        for i in range(14):
             thread = threading.Thread(target=self.mine_block, args=(i * 400000, i + 1,))
             thread.start()
             self.threads.append(thread)
